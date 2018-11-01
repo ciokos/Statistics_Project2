@@ -4,6 +4,59 @@ D <- read.table("bmi2_data.csv", header = TRUE, sep = ";")
 # Add log-BMI to the dataset
 D$logbmi <- log(D$bmi)
 
+# Summary statistics
+
+# Histograms:
+# logbmi
+hist(D[,5], main = "Density Histogram of Log-BMI", xlim = c(2.7,3.8),xlab="log-BMI", prob=TRUE,
+     las=1, 
+     col = "green")
+abline(v=median(D[,5]),col="red")
+abline(v=mean(D[,5]),col="blue")
+
+# age
+hist(D[,3], main = "Density Histogram of Age", xlim = c(10,80),xlab="age", prob=TRUE,
+     las=1, 
+     col = "green")
+abline(v=median(D[,3]),col="red")
+abline(v=mean(D[,3]),col="blue")
+
+# fastfood
+hist(D[,4], main = "Density Histogram of Fast food", xlim = c(0,365),xlab="fastfood", prob=TRUE,
+     las=1, 
+     col = "green")
+abline(v=median(D[,4]),col="red")
+abline(v=mean(D[,4]),col="blue")
+
+# Box Plots
+# logbmi
+boxplot(D[,5], xlab="Log-BMI")
+
+# age
+boxplot(D[,3], xlab="Age")
+
+# fastfood
+boxplot(D[,4], xlab="Fast food")
+
+# Scatter Plots
+# logbmi vs age
+plot(D[,5], D[,3], xlab = "logbmi", ylab = "age")
+# logbmi vs fastfood
+plot(D[,5], D[,4], xlab = "logbmi", ylab = "fastfood")
+
+Tbl <- data.frame()
+for(i in 2:5){
+  Tbl[i-1, "Number of obs."] <- sum(!is.na(D[,i]))
+  Tbl[i-1, "Sample mean"] <- mean(D[,i])
+  Tbl[i-1, "Sample st. dev."] <- sd(D[,i])
+  Tbl[i-1, "Lower quartile"] <- quantile(D[,i], 0.25)
+  Tbl[i-1, "Median"] <- median(D[,i])
+  Tbl[i-1, "Upper quartile"] <- quantile(D[,i], 0.75)
+}
+
+row.names(Tbl) <- c("bmi", "age","fastfood", "logbmi")
+xtable(Tbl, align = "p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}")
+
 # Subset containing the first 840 observations (for model estimation)
 D_model <- subset(D, id <= 840)
 
